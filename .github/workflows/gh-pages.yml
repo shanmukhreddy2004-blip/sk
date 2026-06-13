@@ -1,0 +1,35 @@
+# Deploy to GitHub Pages
+# This workflow builds the Vite project and publishes the `dist` folder to the `gh-pages` branch.
+# After this runs, set GitHub Pages source to the `gh-pages` branch (root).
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          # Uncomment the next line to keep the history on the gh-pages branch.
+          # keep_history: true
